@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Tema 2 sbc
+        </title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 100%; 
+            resize: none;
+            color: white;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        textarea {
+            
+            width: 100%;
+            height: 100%; 
+            min-height: 300px;
+            padding: 10px 20px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+        }
+
+        .button {
+            width: 100px;
+            height: 45px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 12px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .buttonX {background-color: #666666;} /* Black */
+        .buttonY {background-color: #444444;} /* Black */
+
+        input[type=text], select {
+            width: 100%;
+            height: 55px;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea { font-size: 14px; }
+        </style>
+    </head>
+
+    <body>
+       
+        <div class="row">
+            <div class="column" style="background-color:#666666;">
+              <form>
+                <textarea id='inputxml' oninput="xml2json()" disabled></textarea>
+              </form>
+              <button class="button buttonY" onclick="load_xml()">Load</button> 
+              <input type="checkbox" name="enable" value="1" onchange="disable_input()"> Edit xml
+            </div>
+
+            <div class="column" style="background-color:#444444;">
+                <form>
+                    <textarea id='output' disabled ></textarea>
+                </form>
+                <button class="button buttonX" id = 'save' onclick="download_json()">Download json</button>
+            </div>  
+        </div>
+
+        <div class="row">
+            <div class="column" style="background-color:#444444;">
+              <input type="text" id="input_search"  placeholder="interogate the xml file" oninput="search()">
+            </div>
+
+            <div class="column" style="background-color:#666666;">
+                <form>
+                    <textarea id='output_search' disabled ></textarea>
+                </form>
+        </div>
+        
+        <script type="text/javascript">
+            document.input_dis = true;
+            document.our_file = 'our_file';
+            document.getElementById('save').disabled = true;
+
+            function disable_input(){
+                if (document.input_dis) {
+                    document.getElementById('inputxml').disabled = false;
+                    document.input_dis = false;
+                } else {
+                    document.getElementById('inputxml').disabled = true;
+                    document.input_dis = true;
+                }
+            }
+
+            function load_xml(){
+                // Check for the various File API support.
+                if (window.File && window.FileReader && window.FileList && window.Blob) {
+                    var input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = '.xml';
+
+                    input.onchange = e => { 
+
+                        // getting a hold of the file reference
+                        var file = e.target.files[0]; 
+
+                        // setting up the reader
+                        var reader = new FileReader();
+                        reader.readAsText(file,'UTF-8');
+
+                        // here we tell the reader what to do when it's done reading...
+                        reader.onload = readerEvent => {
+                            var content = readerEvent.target.result; // this is the content!
+                            document.getElementById('inputxml').value = String(content);
+                            document.our_file = String((file['name'].split('.xml'))[0]);
+                            xml2json();
+                        }
+
+                    }
+
+                    input.click();
+
+                } else {
+                    alert('The File APIs are not fully supported in this browser.');
+                }
+            }
+
+            function parseXml(xmlStr) {
+                return new window.DOMParser().parseFromString(xmlStr, "text/xml");
+            }
+
+            function setJsonObj(xml) {
+                var js_obj = {};
+                if (xml.nodeType == 1) {
+                if (xml.attributes.length > 0) {
+                    js_obj["@attributes"] = {};
+                    for (var j = 0; j < xml.attributes.length; j++) {
+                    var attribute = xml.attributes.item(j);
+                    js_obj["@attributes"][attribute.nodeName] = attribute.value;
+                    }
+                }
+                } else if (xml.nodeType == 3) {
+                js_obj = xml.nodeValue;
+                }            
+                if (xml.hasChildNodes()) {
+                for (var i = 0; i < xml.childNodes.length; i++) {
+                    var item = xml.childNodes.item(i);
+                    var nodeName = item.nodeName;
+                    if (typeof(js_obj[nodeName]) == "undefined") {
+                    js_obj[nodeName] = setJsonObj(item);
+                    } else {
+                    if (typeof(js_obj[nodeName].push) == "undefined") {
+                        var old = js_obj[nodeName];
+                        js_obj[nodeName] = [];
+                        js_obj[nodeName].push(old);
+                    }
+                    js_obj[nodeName].push(setJsonObj(item));
+                    }
+                }
+                }
+                return js_obj;
+            }
+
+            function jsontoStr(js_obj) {
+                var rejsn = JSON.stringify(js_obj, undefined, 2).replace(/(\\t|\\r|\\n)/g, '').replace(/"",[\n\t\r\s]+""[,]*/g, '').replace(/(\n[\t\s\r]*\n)/g, '').replace(/[\s\t]{2,}""[,]{0,1}/g, '').replace(/"[\s\t]{1,}"[,]{0,1}/g, '').replace(/\[[\t\s]*\]/g, '""');
+                return (rejsn.indexOf('"parsererror": {') == -1) ? rejsn : 'Invalid XML format';
+            }
+
+            function xml2json(){
+                if (document.getElementById('save').disabled)
+                    document.getElementById('save').disabled = false;
+                var xml_txt = document.getElementById('inputxml').value;
+                var xml = parseXml(xml_txt);
+
+                document.getElementById('output').value = jsontoStr(setJsonObj((xml)));
+            }
+
+            function saveText(text, filename){
+                var a = document.createElement('a');
+                a.setAttribute('href', 'data:text/plain;charset=utf-u,'+encodeURIComponent(text));
+                a.setAttribute('download', filename);
+                a.click()
+            }
+
+            function download_json(){
+                var xml_txt = document.getElementById('inputxml').value;
+                var xml = parseXml(xml_txt);
+
+                var json_text = jsontoStr(setJsonObj((xml)));
+                saveText(json_text, document.our_file + ".json" );
+            }
+
+            function go_tho_tags(tag, inc, xmlDoc,indx) {
+                console.log(tag[inc], '---')
+                let tags = tag[inc].split(',');
+                if (tags.length > 1) {
+                    let real_x = [];
+                    for (let i = 0; i < tags.length ; i += 1)
+                        real_x.push(xmlDoc.getElementsByTagName(tags[i]))
+
+                    txt = '';   
+                    inc += 1;
+                    for(let j = 0; j< real_x[0].length; j++){
+                        for (let i = 0; i< real_x.length; i++) { 
+                            try {
+                            txt += "   ".repeat(inc-1) + String(tags[i]) + ': ' + real_x[i][j].childNodes[0].nodeValue + '\n';
+                            } catch(e) {
+                                console.log(e);
+                            }
+                            if (tag.length> inc + 1) 
+                                txt += go_tho_tags(tag, inc, xmlDoc,indx);                          
+                        }
+                           
+                   }
+
+                    
+                } else {
+                    tags = tags[0];
+                    let x = xmlDoc.getElementsByTagName(tags);
+                    txt = '';  
+                    
+                    try {
+                        txt += "   ".repeat(inc) + String(tags) + ': ' + x[indx].childNodes[0].nodeValue + '\n';    
+                    } catch(e) {
+                        console.log(e);
+                    }
+                       
+
+                    if (indx <   x.length) {
+                        if(tag.length>inc+1)
+                            txt += go_tho_tags(tag, inc+1, xmlDoc,indx);
+                        else
+                            txt += go_tho_tags(tag, 0, xmlDoc,indx+1);
+                    }
+                    
+                }
+                return txt;
+            }
+
+            function search() {
+                var x, i, xmlDoc, txt;
+                xmlDoc = parseXml((document.getElementById('inputxml').value).replace(/(\r\n|\n|\r)/g,""));
+                txt = "";
+                tags = (document.getElementById('input_search').value).split(':');
+                
+                try {
+                    txt = go_tho_tags(tags, 0, xmlDoc,0); 
+                } catch(e) {
+                    console.log(e);
+                }
+                console.log(tags)
+                document.getElementById("output_search").innerHTML = txt;
+            }
+
+            function search2() {
+                var x, i, xmlDoc, txt;
+                xmlDoc = parseXml((document.getElementById('inputxml').value).replace(/(\r\n|\n|\r)/g,""));
+                txt = "";
+                
+                x = xmlDoc.getElementsByTagName(document.getElementById('input_search').value);
+                for (i = 0; i< x.length; i++) {
+                    if (txt.includes(x[i].childNodes[0].nodeValue) == false)
+                        txt += x[i].childNodes[0].nodeValue + '\n';
+                }
+
+                document.getElementById("output_search").innerHTML = txt;
+            }
+        </script>
+
+    </body>
+</html>
