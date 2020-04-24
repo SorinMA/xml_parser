@@ -1,0 +1,136 @@
+{
+  "functii_de_activare": [
+    {
+      "nume_functie": "ReLU",
+      "layer": [
+        {
+          "nume_layer": "Hidden",
+          "acuratete": "Foarte buna"
+        },
+        {
+          "nume_layer": "Output",
+          "acuratete": "Buna"
+        }
+      ],
+      "avantaj": [
+        "eficient computational",
+        "non linear"
+      ],
+      "dezavantaj": "dying relu problem"
+    },
+    {
+      "nume_functie": "Sigmoid",
+      "layer": [
+        {
+          "nume_layer": "Hidden",
+          "acuratete": "Slabuta"
+        },
+        {
+          "nume_layer": "Output",
+          "acuratete": "OK"
+        }
+      ],
+      "avantaj": [
+        "smooth gradient",
+        "output values bound",
+        "clear predictions"
+      ],
+      "dezavantaj": [
+        "vanishing gradient",
+        "outputs not zero centered",
+        "computationally expensive"
+      ]
+    },
+    {
+      "nume_functie": "Tangenta hiperbolica",
+      "layer": [
+        {
+          "nume_layer": "Hidden",
+          "acuratete": "Buna"
+        },
+        {
+          "nume_layer": "Output",
+          "acuratete": "OK"
+        }
+      ],
+      "avantaj": [
+        "zero centered",
+        "smooth gradient",
+        "output values bound",
+        "clear predictions"
+      ],
+      "dezavantaj": [
+        "vanishing gradient",
+        "outputs not zero centered",
+        "computationally expensive"
+      ]
+    },
+    {
+      "nume_functie": "Leaky_ReLU",
+      "layer": {
+        "nume_layer": "Hidden",
+        "acuratete": "Buna"
+      },
+      "avantaj": [
+        "eficient computational",
+        "non linear",
+        "prevents dying"
+      ],
+      "dezavantaj": "results not consistent"
+    },
+    {
+      "nume_functie": "ReLU_parametrizat",
+      "layer": {
+        "nume_layer": "Hidden",
+        "acuratete": "Buna"
+      },
+      "avantaj": [
+        "eficient computational",
+        "non linear",
+        "allows the negative slope to be learned"
+      ],
+      "dezavantaj": "may perform differently"
+    },
+    {
+      "nume_functie": "Softmax",
+      "layer": {
+        "nume_layer": "Hidden",
+        "acuratete": "Foarte buna"
+      },
+      "avantaj": [
+        "able to handle multiple classes",
+        "useful for output neurons"
+      ]
+    },
+    {
+      "nume_functie": "Swish",
+      "layer": {
+        "nume_layer": "Hidden",
+        "acuratete": "Foarte buna"
+      },
+      "avantaj": [
+        "performs better than ReLU",
+        "eficient computational"
+      ],
+      "dezavantaj": "experimental"
+    }
+  ],
+  "cuantificare_acuratete": [
+    {
+      "@eroare_fata_de_ideal": "0.1",
+      "#text": "Foarte buna"
+    },
+    {
+      "@eroare_fata_de_ideal": "0.5",
+      "#text": "Buna"
+    },
+    {
+      "@eroare_fata_de_ideal": "1",
+      "#text": "OK"
+    },
+    {
+      "@eroare_fata_de_ideal": "2",
+      "#text": "Slabuta"
+    }
+  ]
+}

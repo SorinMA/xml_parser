@@ -1,0 +1,46 @@
+<?xml encoding="UTF-8"?>
+
+<!ELEMENT deep_learning (functii_de_activare,cuantificare_acuratete)>
+<!ATTLIST deep_learning
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT functii_de_activare (functie)*>
+<!ATTLIST functii_de_activare
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT cuantificare_acuratete (acuratete_functie)+>
+<!ATTLIST cuantificare_acuratete
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT functie (nume_functie,layer*,avantaj*,dezavantaj*)>
+<!ATTLIST functie
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT acuratete_functie (#PCDATA)>
+<!ATTLIST acuratete_functie
+  xmlns CDATA #FIXED ''
+  eroare_fata_de_ideal CDATA #REQUIRED>
+
+<!ELEMENT nume_functie (#PCDATA)>
+<!ATTLIST nume_functie
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT layer (nume_layer,acuratete)>
+<!ATTLIST layer
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT avantaj (#PCDATA)>
+<!ATTLIST avantaj
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT dezavantaj (#PCDATA)>
+<!ATTLIST dezavantaj
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT nume_layer (#PCDATA)>
+<!ATTLIST nume_layer
+  xmlns CDATA #FIXED ''>
+
+<!ELEMENT acuratete (#PCDATA)>
+<!ATTLIST acuratete
+  xmlns CDATA #FIXED ''>

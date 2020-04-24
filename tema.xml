@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<deep_learning>
+	<functii_de_activare>
+		<functie>
+			<nume_functie>ReLU</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Foarte buna</acuratete>
+			</layer>
+			<layer>
+				<nume_layer>Output</nume_layer>
+				<acuratete>Buna</acuratete>
+			</layer>
+			<avantaj>eficient computational</avantaj>
+			<avantaj>non linear</avantaj>
+			<dezavantaj>dying relu problem</dezavantaj>
+		</functie>
+		<functie>
+			<nume_functie>Sigmoid</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Slabuta</acuratete>
+			</layer>
+			<layer>
+				<nume_layer>Output</nume_layer>
+				<acuratete>OK</acuratete>
+			</layer>
+			<avantaj>smooth gradient</avantaj>
+			<avantaj>output values bound</avantaj>
+			<avantaj>clear predictions</avantaj>
+			<dezavantaj>vanishing gradient</dezavantaj>
+			<dezavantaj>outputs not zero centered</dezavantaj>
+			<dezavantaj>computationally expensive</dezavantaj>
+		</functie>
+		<functie>
+			<nume_functie>Tangenta hiperbolica</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Buna</acuratete>
+			</layer>
+			<layer>
+				<nume_layer>Output</nume_layer>
+				<acuratete>OK</acuratete>
+			</layer>
+			<avantaj>zero centered</avantaj>
+			<avantaj>smooth gradient</avantaj>
+			<avantaj>output values bound</avantaj>
+			<avantaj>clear predictions</avantaj>
+			<dezavantaj>vanishing gradient</dezavantaj>
+			<dezavantaj>outputs not zero centered</dezavantaj>
+			<dezavantaj>computationally expensive</dezavantaj>
+		</functie>
+		<functie>
+			<nume_functie>Leaky_ReLU</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Buna</acuratete>
+			</layer>
+			<avantaj>eficient computational</avantaj>
+			<avantaj>non linear</avantaj>
+			<avantaj>prevents dying</avantaj>
+			<dezavantaj>results not consistent</dezavantaj>
+		</functie>
+		<functie>
+			<nume_functie>ReLU_parametrizat</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Buna</acuratete>
+			</layer>
+			<avantaj>eficient computational</avantaj>
+			<avantaj>non linear</avantaj>
+			<avantaj>allows the negative slope to be learned</avantaj>
+			<dezavantaj>may perform differently</dezavantaj>
+		</functie>
+		<functie>
+			<nume_functie>Softmax</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Foarte buna</acuratete>
+			</layer>
+			<avantaj>able to handle multiple classes</avantaj>
+			<avantaj>useful for output neurons</avantaj>
+		</functie>
+		<functie>
+			<nume_functie>Swish</nume_functie>
+			<layer>
+				<nume_layer>Hidden</nume_layer>
+				<acuratete>Foarte buna</acuratete>
+			</layer>
+			<avantaj>performs better than ReLU</avantaj>
+			<avantaj>eficient computational</avantaj>
+			<dezavantaj>experimental</dezavantaj>
+		</functie>
+	</functii_de_activare>
+	<cuantificare_acuratete>
+		<acuratete_functie eroare_fata_de_ideal="0.1">Foarte buna</acuratete_functie>
+		<acuratete_functie eroare_fata_de_ideal="0.5">Buna</acuratete_functie>
+		<acuratete_functie eroare_fata_de_ideal="1">OK</acuratete_functie>
+		<acuratete_functie eroare_fata_de_ideal="2">Slabuta</acuratete_functie>
+	</cuantificare_acuratete>
+</deep_learning>
